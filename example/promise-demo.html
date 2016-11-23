@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Demo of .ajax using Promises</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script>
+        $(document).ready(function(){
+            // update the page with info from json data
+            function updatePerson(jsonData) {
+                updateName(jsonData);
+                updateAge(jsonData);
+            }
+
+            // update name only
+            function updateName(jsonData) {
+                $("#name").html(jsonData.name);
+            }
+
+            // update age only
+            function updateAge(jsonData) {
+                $("#age").html(jsonData.age);
+            }
+
+            // update the allDone span when all ajax calls have completed
+            function allDone(jqXHR1, jqXHR2) {
+                $("#allDone").html("Calls completed!");
+            }
+
+            // log error messages from ajax calls to the console
+            function logError(jqXHR, message, errCode) {
+                console.log("Got error " + message + "; code " + errCode);
+            }
+
+            /*
+             * Lookup json data through ajax call
+             */
+            $("button").click(function(){
+
+                // ajax call 1 to get the name
+                var ajaxPromise1 = $.ajax({
+                    url: "sample1.json",
+                    dataType: "json"});
+
+                // attach the callback functions
+                ajaxPromise1.done(updateName)
+                    .fail(logError);
+
+                // ajax call 2 to get the age
+                var ajaxPromise2 = $.ajax({
+                    url: "sample1.json",
+                    dataType: "json"});
+
+                ajaxPromise2.done(updateAge)
+                    .fail(logError);
+
+                // Create a new Deferred object to call when both promises are done.
+                $.when(ajaxPromise1, ajaxPromise2).done(allDone(ajaxPromise1, ajaxPromise2));
+            });
+        });
+    </script>
+</head>
+<body>
+
+<div>
+    <h3>Click the button to load info</h3>
+    Person<br/>
+    &nbsp; &nbsp;Name: <span id="name"></span><br/>
+    &nbsp; &nbsp;Age: <span id="age"></span><br/>
+    <span id="allDone"></span><br/>
+    <p>
+        <button>Get Person</button>
+    </p>
+</div>
+
+</body>
+</html>

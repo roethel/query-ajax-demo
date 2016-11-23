@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Demo of Callback Ajax</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script>
+        $(document).ready(function(){
+            $("button").click(function(){
+                console.log("Clicking button");
+                $.ajax({
+                    url: "sample1.json",
+                    dataType: "json",
+                    success: function(result){
+                        console.log("Got result: " + result);
+                        $("#name").html(result.name);
+                        $("#age").html(result.age);
+                    },
+                    error: function(jqXHR, message, errCode) {
+                        console.log("Got error " + message + "; code " + errCode);
+                    }
+                });
+            });
+        });
+    </script>
+</head>
+<body>
+
+<div>
+    <h3>Click the button to load info</h3>
+    Person<br/>
+    &nbsp; &nbsp;Name: <span id="name"></span><br/>
+    &nbsp; &nbsp;Age: <span id="age"></span><br/>
+
+    <p>
+        <button>Get Person</button>
+    </p>
+</div>
+
+
+</body>
+</html>
